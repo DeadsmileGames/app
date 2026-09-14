@@ -38,7 +38,7 @@ export default function Wishlist() {
                         Sign in to view your wishlist
                     </Text>
                     <Text style={s.copy}>
-                        The wishlist uses the real Deadsmile backend session.
+                        Your wishlist is synchronized through your Deadsmile Games account.
                     </Text>
                     <Pressable
                         onPress={() => router.push("/login")}

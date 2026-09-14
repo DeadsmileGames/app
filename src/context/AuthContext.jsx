@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { api } from "../services/api";
+import { unregisterPushNotifications } from "../services/notifications";
 
 const AuthContext = createContext(null);
 
@@ -57,6 +58,7 @@ export function AuthProvider({ children }) {
 
     return result;
   }, []);
+
   const verifyTwoFactor = useCallback(async (token) => {
     const me = await api.post("/auth/verify-2fa", {
       token,
@@ -68,6 +70,7 @@ export function AuthProvider({ children }) {
 
     return me;
   }, []);
+
   const register = useCallback(async (payload) => {
     const me = await api.post("/auth/mobile-register", payload);
 
@@ -77,8 +80,10 @@ export function AuthProvider({ children }) {
 
     return me;
   }, []);
+
   const logout = useCallback(async () => {
     try {
+      await unregisterPushNotifications().catch(() => {});
       await api.post("/auth/logout");
     } finally {
       setUser(null);

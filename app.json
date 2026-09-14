@@ -2,17 +2,21 @@
   "expo": {
     "name": "Deadsmile Games",
     "slug": "deadsmile-mobile",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "scheme": "deadsmile",
     "userInterfaceStyle": "dark",
     "android": {
+      "versionCode": 2,
       "package": "com.deadsmile.games",
       "adaptiveIcon": {
         "backgroundColor": "#f80202",
         "foregroundImage": "./assets/branding/icons/icon.png",
         "monochromeImage": "./assets/branding/icons/mono.png"
       }
+    },
+    "ios": {
+      "buildNumber": "2"
     },
     "web": {
       "bundler": "metro",
@@ -21,6 +25,14 @@
     "plugins": [
       "expo-router",
       "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/branding/icons/notification.png",
+          "color": "#f80202",
+          "defaultChannel": "publications"
+        }
+      ],
       [
         "expo-splash-screen",
         {

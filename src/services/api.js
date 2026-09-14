@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
-const API_URL = (process.env.EXPO_PUBLIC_API_URL || '').replace(/\/$/, '');
-export const SITE_URL = (process.env.EXPO_PUBLIC_SITE_URL || '').replace(/\/$/, '');
+export const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'https://deadsmile.vercel.app/api').replace(/\/$/, '');
+export const SITE_URL = (process.env.EXPO_PUBLIC_SITE_URL || 'https://deadsmilegames.vercel.app').replace(/\/$/, '');
 
 let csrfToken = null;
 let csrfPromise = null;

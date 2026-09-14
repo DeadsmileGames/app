@@ -60,11 +60,11 @@ export default function Config() {
                 <View style={styles.role}><Text style={styles.roleText}>{user?.role || "user"}</Text></View>
               </View>
               <Row icon={UserCircle} title="Account details" description="Profile and account information" onPress={() => router.push("/account")} />
-              <Row icon={ShieldCheck} title="Security" description="Manage security on the Deadsmile website" onPress={() => Linking.openURL(`${SITE_URL}/account`)} right={<ArrowSquareOut size={17} color={colors.onSurfaceVariant} />} />
+              <Row icon={ShieldCheck} title="Security" description="Manage security on the Deadsmile Games website" onPress={() => Linking.openURL(`${SITE_URL}/account`)} right={<ArrowSquareOut size={17} color={colors.onSurfaceVariant} />} />
               <Row icon={SignOut} title="Sign out" description="End this device session" onPress={signOut} danger />
             </>
           ) : (
-            <Row icon={UserCircle} title="Sign in" description="Sync wishlist and account with Deadsmile" onPress={() => router.push("/login")} />
+            <Row icon={UserCircle} title="Sign in" description="Sync wishlist and account with Deadsmile Games" onPress={() => router.push("/login")} />
           )}
 
           {user?.role === "admin" || user?.role === "administrator" ? (
@@ -100,9 +100,9 @@ export default function Config() {
           </View>
 
           <Text style={styles.sectionLabel}>About</Text>
-          <Row icon={ArrowSquareOut} title="Open Deadsmile website" description="Access the full web experience" onPress={() => Linking.openURL(SITE_URL)} right={<ArrowSquareOut size={17} color={colors.onSurfaceVariant} />} />
+          <Row icon={ArrowSquareOut} title="Open Deadsmile Games website" description="Access the full web experience" onPress={() => Linking.openURL(SITE_URL)} right={<ArrowSquareOut size={17} color={colors.onSurfaceVariant} />} />
           <Row icon={ShieldCheck} title="Privacy & terms" description="Read the website policies" onPress={() => Linking.openURL(`${SITE_URL}/privacy`)} right={<ArrowSquareOut size={17} color={colors.onSurfaceVariant} />} />
-          <Text style={styles.version}>Version 1.1</Text>
+          <Text style={styles.version}>Version 1.1.0</Text>
         </>
       )}
     </Screen>

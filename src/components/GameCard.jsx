@@ -50,7 +50,7 @@ export function GameCard({ game, index = 0, horizontal = false }) {
             {game.title}
           </Text>
           <Text numberOfLines={2} style={s.desc}>
-            {game.shortDescription || game.short_description || 'Deadsmile'}
+            {game.shortDescription || game.short_description || 'Deadsmile Games'}
           </Text>
           {Array.isArray(game.platforms) && game.platforms.length > 0 && (
             <Text numberOfLines={1} style={s.meta}>

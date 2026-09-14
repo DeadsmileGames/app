@@ -99,7 +99,7 @@ export default function Register() {
 
         <Text style={styles.copy}>
           One account for your wishlist and the
-          Deadsmile experience.
+          Deadsmile Games experience.
         </Text>
 
         {[

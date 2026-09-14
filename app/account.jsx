@@ -51,7 +51,7 @@ export default function Account() {
       ) : (
         <View style={styles.guest}>
           <Text style={styles.name}>No account signed in.</Text>
-          <Text style={styles.bio}>Sign in to sync your wishlist and account with the Deadsmile website.</Text>
+          <Text style={styles.bio}>Sign in to sync your wishlist and account with the Deadsmile Games website.</Text>
           <Pressable style={styles.button} onPress={() => router.replace("/login")}><Text style={styles.buttonText}>Sign in</Text></Pressable>
         </View>
       )}

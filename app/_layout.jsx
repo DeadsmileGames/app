@@ -6,6 +6,7 @@ import { useFonts, Manrope_400Regular, Manrope_500Medium, Manrope_700Bold } from
 import { SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { AuthProvider } from '../src/context/AuthContext';
 import { SettingsProvider } from '../src/context/SettingsContext';
+import { LiveProvider } from '../src/context/LiveContext';
 import { colors, type } from '../src/theme/tokens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Updates from 'expo-updates';
@@ -38,8 +39,7 @@ export default function RootLayout() {
         }
         await Updates.reloadAsync();
       }
-    } catch (error) {
-      console.error('Update error:', error);
+    } catch {
       setIsUpdating(false);
     }
   }
@@ -71,6 +71,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <SettingsProvider>
           <AuthProvider>
+            <LiveProvider>
             <StatusBar style="light" backgroundColor={colors.background} />
         <Stack
           screenOptions={{
@@ -88,11 +89,13 @@ export default function RootLayout() {
           <Stack.Screen name="register" options={{ presentation: "modal" }} />
           <Stack.Screen name="search" options={{ presentation: 'modal' }} />
           <Stack.Screen name="check-updates" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="notifications" options={{ presentation: 'modal' }} />
           <Stack.Screen name="login" options={{ presentation: 'modal' }} />
           <Stack.Screen name="admin/newsletter" options={{ presentation: 'modal' }} />
           <Stack.Screen name="admin/video" options={{ presentation: 'modal' }} />
           <Stack.Screen name="admin/game" options={{ presentation: 'modal' }} />
           </Stack>
+          </LiveProvider>
           </AuthProvider>
         </SettingsProvider>
     </SafeAreaProvider>

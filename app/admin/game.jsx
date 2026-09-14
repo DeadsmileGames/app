@@ -21,6 +21,7 @@ export default function AdminGame() {
     trailerUrl: '',
     featured: false,
     purchaseUrl: '',
+    itchGameId: '',
     downloadUrl: '',
     genres: '',
     platforms: '',
@@ -41,6 +42,7 @@ export default function AdminGame() {
         releaseDate: form.releaseDate || null,
         trailerUrl: form.trailerUrl || null,
         purchaseUrl: form.purchaseUrl || null,
+        itchGameId: form.itchGameId ? Number(form.itchGameId) : null,
         downloadUrl: form.downloadUrl || null,
         genres: form.genres.split(',').map((s) => s.trim()).filter(Boolean),
         platforms: form.platforms.split(',').map((s) => s.trim()).filter(Boolean),
@@ -109,7 +111,12 @@ export default function AdminGame() {
 
         <View style={styles.field}>
           <Text style={styles.label}>Purchase URL</Text>
-          <TextInput style={styles.input} value={form.purchaseUrl} onChangeText={setField('purchaseUrl')} placeholder="https://store.steampowered.com/..." placeholderTextColor={colors.onSurfaceVariant} />
+          <TextInput style={styles.input} value={form.purchaseUrl} onChangeText={setField('purchaseUrl')} placeholder="https://creator.itch.io/game/purchase" placeholderTextColor={colors.onSurfaceVariant} autoCapitalize="none" />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>itch.io game ID</Text>
+          <TextInput style={styles.input} value={form.itchGameId} onChangeText={setField('itchGameId')} placeholder="4520313" placeholderTextColor={colors.onSurfaceVariant} keyboardType="numeric" />
         </View>
 
         <View style={styles.field}>

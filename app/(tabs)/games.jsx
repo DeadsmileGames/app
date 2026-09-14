@@ -19,7 +19,7 @@ export default function Games() {
         <Text style={styles.title}>Games</Text>
 
         <Text style={styles.copy}>
-          Explore every Deadsmile game, from announcement to release.
+          Explore every Deadsmile Games title, from announcement to release.
         </Text>
       </View>
 

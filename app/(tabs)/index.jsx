@@ -321,13 +321,6 @@ export default function Home() {
                   ? `${activeGame.title} background`
                   : "Game background"
               }
-              onError={(event) => {
-                console.warn(
-                  "[DEADSMILE] Hero image failed:",
-                  heroUrl,
-                  event?.error || ""
-                );
-              }}
             />
           ) : (
             <View
@@ -361,15 +354,6 @@ export default function Home() {
                   styles.heroTextColumn
                 }
               >
-                <Text
-                  style={styles.heroEyebrow}
-                  numberOfLines={1}
-                >
-                  {activeGame.genres?.[0] ||
-                    activeGame.shortDescription ||
-                    "DEADSMILE GAMES"}
-                </Text>
-
                 <Text
                   style={[
                     styles.heroTitle,
@@ -862,20 +846,6 @@ const styles = StyleSheet.create({
     flex: 1,
 
     maxWidth: 760,
-  },
-
-  heroEyebrow: {
-    fontFamily: type.bodyBold,
-
-    color: colors.primary,
-
-    fontSize: 10,
-
-    letterSpacing: 1.7,
-
-    textTransform: "uppercase",
-
-    marginBottom: 8,
   },
 
   heroTitle: {

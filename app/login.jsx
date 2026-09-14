@@ -31,6 +31,7 @@ export default function Login() {
     }
 
     setError("");
+
     if (mode === "2fa") {
       const verificationCode = token
         .replace(/\D/g, "")
@@ -56,6 +57,7 @@ export default function Login() {
 
       return;
     }
+
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!normalizedEmail || !password) {
@@ -70,11 +72,13 @@ export default function Login() {
         normalizedEmail,
         password
       );
+
       if (result?.requiresTwoFactor) {
         setToken("");
         setMode("2fa");
         return;
       }
+
       router.replace("/config");
     } catch (e) {
       setError(
@@ -177,7 +181,7 @@ export default function Login() {
             </Text>
 
             <Text style={styles.copy}>
-              Use the same account as the Deadsmile
+              Use the same account as the Deadsmile Games
               website.
             </Text>
 

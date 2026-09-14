@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Linking, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialIcon } from "../../src/components/MaterialIcon";
@@ -12,6 +12,7 @@ import { api, SITE_URL } from "../../src/services/api";
 import { colors, radius, type } from "../../src/theme/tokens";
 import { resolveAssetUrl } from "../../src/utils/resolveAsset";
 import { useGoBack } from "../../src/hooks/useGoBack";
+import { useLive } from "../../src/context/LiveContext";
 
 export default function GameDetail() {
   const { slug } = useLocalSearchParams();
@@ -20,10 +21,20 @@ export default function GameDetail() {
 
   const { width } = useWindowDimensions();
   const { status } = useAuth();
+  const { revision } = useLive();
   const q = useApiData(slug ? `/games/${slug}` : null, {}, null);
   const game = q.data;
   const [wish, setWish] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [selectedShot, setSelectedShot] = useState(-1);
+
+  async function openUrl(value) {
+    try {
+      const url = new URL(value);
+      if (url.protocol !== 'https:') return;
+      await Linking.openURL(url.toString());
+    } catch {}
+  }
 
   useEffect(() => {
     if (status === "authenticated" && game?.id) {
@@ -31,7 +42,7 @@ export default function GameDetail() {
         .then((x) => setWish(!!x?.inWishlist))
         .catch(() => {});
     }
-  }, [status, game?.id]);
+  }, [status, game?.id, revision]);
 
   async function toggleWish() {
     if (status !== "authenticated") {
@@ -124,7 +135,7 @@ export default function GameDetail() {
             </Pressable>
             {game.trailerUrl && (
               <Pressable
-                onPress={() => Linking.openURL(game.trailerUrl)}
+                onPress={() => openUrl(game.trailerUrl)}
                 style={s.action}
               >
                 <MaterialIcon name="play-arrow" size={20} color={colors.onSurface} />
@@ -173,18 +184,19 @@ export default function GameDetail() {
             contentContainerStyle={{ gap: 10 }}
           >
             {game.screenshots.map((uri, i) => (
+              <Pressable key={`${uri}-${i}`} onPress={() => setSelectedShot(i)} accessibilityLabel={`Open screenshot ${i + 1}`}>
               <Image
-                key={`${uri}-${i}`}
                 source={{ uri: resolveAssetUrl(uri) }}
                 style={s.shot}
                 contentFit="cover"
               />
+              </Pressable>
             ))}
           </ScrollView>
           {game.slug && (
             <Pressable
               onPress={() =>
-                Linking.openURL(`${SITE_URL}/game/${game.slug}`)
+                openUrl(`${SITE_URL}/games/${game.slug}`)
               }
               style={[s.link, { marginTop: 16 }]}
             >
@@ -199,17 +211,17 @@ export default function GameDetail() {
       <View style={s.links}>
         {game.purchaseUrl && (
           <Pressable
-            onPress={() => Linking.openURL(game.purchaseUrl)}
+            onPress={() => openUrl(game.purchaseUrl)}
             style={s.link}
           >
             <MaterialIcon name="shopping-bag" size={21} color={colors.onPrimary} />
-            <Text style={s.linkText}>Buy</Text>
+            <Text style={s.linkText}>Buy on itch.io</Text>
             <MaterialIcon name="open-in-new" size={18} color={colors.onPrimary} />
           </Pressable>
         )}
         {game.downloadUrl && (
           <Pressable
-            onPress={() => Linking.openURL(game.downloadUrl)}
+            onPress={() => openUrl(game.downloadUrl)}
             style={s.link}
           >
             <MaterialIcon name="download" size={21} color={colors.onPrimary} />
@@ -230,6 +242,26 @@ export default function GameDetail() {
             </View>
           </View>
         )}
+
+      <Modal visible={selectedShot >= 0} transparent animationType="fade" onRequestClose={() => setSelectedShot(-1)}>
+        <View style={s.lightbox}>
+          <Pressable onPress={() => setSelectedShot(-1)} style={s.lightboxClose} accessibilityLabel="Close screenshot">
+            <Text style={s.lightboxCloseText}>×</Text>
+          </Pressable>
+          {selectedShot >= 0 && game.screenshots[selectedShot] && (
+            <Image source={{ uri: resolveAssetUrl(game.screenshots[selectedShot]) }} style={s.lightboxImage} contentFit="contain" />
+          )}
+          <View style={s.lightboxControls}>
+            <Pressable onPress={() => setSelectedShot((selectedShot - 1 + game.screenshots.length) % game.screenshots.length)} style={s.lightboxButton}>
+              <MaterialIcon name="arrow-back" size={22} color={colors.onSurface} />
+            </Pressable>
+            <Text style={s.lightboxCount}>{selectedShot + 1} / {game.screenshots.length}</Text>
+            <Pressable onPress={() => setSelectedShot((selectedShot + 1) % game.screenshots.length)} style={s.lightboxButton}>
+              <MaterialIcon name="arrow-forward" size={22} color={colors.onSurface} />
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </Screen>
   );
 }
@@ -336,4 +368,11 @@ const s = StyleSheet.create({
   },
   linkText: { fontFamily: type.bodyBold, color: colors.onPrimary },
   related: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
+  lightbox: { flex: 1, backgroundColor: 'rgba(0,0,0,.96)', alignItems: 'center', justifyContent: 'center', padding: 16 },
+  lightboxImage: { width: '100%', height: '76%' },
+  lightboxClose: { position: 'absolute', top: 54, right: 20, zIndex: 2, width: 46, height: 46, borderRadius: 23, backgroundColor: colors.surfaceContainer, alignItems: 'center', justifyContent: 'center' },
+  lightboxCloseText: { color: colors.onSurface, fontFamily: type.body, fontSize: 30, lineHeight: 32 },
+  lightboxControls: { position: 'absolute', bottom: 48, flexDirection: 'row', alignItems: 'center', gap: 18 },
+  lightboxButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surfaceContainer, alignItems: 'center', justifyContent: 'center' },
+  lightboxCount: { color: colors.onSurface, fontFamily: type.bodyBold, fontSize: 12 },
 });
